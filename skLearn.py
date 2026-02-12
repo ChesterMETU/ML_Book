@@ -75,7 +75,29 @@ lr = LogisticRegression(C=100.0, solver="lbfgs", multi_class="ovr")
 
 lr.fit(X_train_std, y_train)
 
-print("Accuracy: %.3f" % lr.score(X_Test_std, y_test))
+print("LR Accuracy: %.3f" % lr.score(X_Test_std, y_test))
 
 print(lr.predict_proba(X_Test_std[:3, :]))
 print(lr.predict_proba(X_Test_std[:3, :]).argmax(axis=1))
+
+from sklearn.svm import SVC
+
+svm = SVC(kernel="linear", C=1.0, random_state=1)
+svm.fit(X_train_std, y_train)
+
+print("SVM Accuracy: %.3f" % svm.score(X_Test_std, y_test))
+
+np.random.seed(1)
+X_xor = np.random.randn(200, 2)
+y_xor = np.logical_xor(X_xor[:, 0] > 0, X_xor[:, 1] > 0)
+
+y_xor = np.where(y_xor, 1, 0)
+
+svm_kernel = SVC(kernel="rbf", random_state=1, gamma=0.10, C=10.0)
+svm_kernel.fit(X_xor, y_xor)
+
+from sklearn.neighbors import KNeighborsClassifier
+
+knn = KNeighborsClassifier(n_neighbors=5, p=2, metric="minkowski")
+
+knn.fit(X_train_std, y_train)
